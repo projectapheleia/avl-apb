@@ -1,0 +1,140 @@
+# Copyright 2025 Apheleia
+#
+# Description:
+# Apheleia Verification Library Sequence Item
+
+import avl
+
+from z3 import Implies, BoolRef
+
+from typing import Any
+
+class SequenceItem(avl.SequenceItem):
+    def __init__(self, name: str, parent: avl.Component) -> None:
+        """
+        Initialize the sequence item
+
+        :param name: Name of the sequence item
+        :param parent: Parent component of the sequence item
+        """
+        super().__init__(name, parent)
+
+        # Handle to interface - defines capabilites and parameters
+        i_f = avl.Factory.get_variable(f"{self.get_full_name()}.i_f", None)
+
+        self.paddr = avl.Logic(0, width=i_f.address_width, fmt=hex)
+        """Address"""
+        self.psel = avl.Logic(0, width=i_f.psel_width, fmt=hex)
+        """Select (1-hot)"""
+        self.pwrite = avl.Logic(0, width=1, fmt=str)
+        """Write enable"""
+        self.pwdata = avl.Logic(0, width=i_f.data_width, fmt=hex)
+        """Write data"""
+        self.prdata = avl.Logic(0, width=i_f.data_width, fmt=hex)
+        """Read data"""
+
+        if i_f.version >= 3:
+            self.pslverr = avl.Logic(0, width=1, fmt=str)
+            """Slave error (>= version 3)"""
+
+        if i_f.version >= 4:
+            self.pstrb = avl.Logic(0, width=int(i_f.data_width / 8), fmt=hex)
+            """Write strobe (byte enable) (>= version 4)"""
+            if i_f.protection:
+                self.pprot = avl.Logic(0, width=3, fmt=hex)
+                """Protection bits (optional >= version 4)"""
+
+        if i_f.version >= 5:
+            if i_f.protection and i_f.rme:
+                self.pnse = avl.Logic(0, width=1, fmt=str)
+                """Non-secure enable (optional >= version 5)"""
+
+            if i_f.wakeup:
+                self.goto_sleep = avl.Bool(False)
+                """Wakeup indication (optional >= version 5)"""
+
+            if i_f.user_req_width > 0:
+                self.pauser = avl.Logic(0, width=max(1, i_f.user_req_width), fmt=hex)
+                """User Request Sideband (optional >= version 5)"""
+            if i_f.user_data_width > 0:
+                self.pwuser = avl.Logic(0, width=max(1, i_f.user_data_width), fmt=hex)
+                """User Write Sideband (optional >= version 5)"""
+                self.pruser = avl.Logic(0, width=max(1, i_f.user_data_width), fmt=hex)
+                """User Read Sideband (optional >= version 5)"""
+            if i_f.user_resp_width > 0:
+                self.pbuser = avl.Logic(0, width=max(1, i_f.user_resp_width), fmt=hex)
+                """User Response Sideband (optional >= version 5)"""
+
+        # Constraints
+        self.add_constraint("c_psel_valid", lambda x : x != 0, self.psel)
+        self.add_constraint("c_psel_1hot", lambda x : (x & (x-1) == 0), self.psel)
+
+        if hasattr(self, "pstrb"):
+            self.add_constraint("c_pstrb", lambda x, y : Implies(x == 0, y == 0), self.pwrite, self.pstrb)
+
+        # Monitor only attributes used for debug and coverage
+        self.wait_cycles = 0
+        """Wait cycles - cycles from enable to ready (monitor only)"""
+        self.set_field_attributes("wait_cycles", compare=False)
+
+        self.time_since_wakeup = 0
+        """Time since last wakeup - used for debug and coverage (monitor only)"""
+        self.set_field_attributes("time_since_wakeup", compare=False)
+
+        # By default transpose to make more readable
+        self.set_table_fmt(transpose=True)
+
+    def set(self, name : str, value : int) -> None:
+        """
+        Set the value of a field in the sequence item - if it exists.
+
+        :param name: Name of the field to set
+        :param value: Value to set for the field
+        """
+        signal = getattr(self, name, None)
+        if signal is not None:
+            signal.value = value
+
+    def get(self, name : str, default : Any = None) -> int:
+        """
+        Get the value of a field in the sequence item - if it exists.
+
+        :param name: Name of the field to get
+        :param default: Default value to return if the field does not exist
+        :return: Value of the field or default value
+        """
+        signal = getattr(self, name, None)
+        if signal is not None:
+            return signal.value
+        return default
+
+    def randomize_request(self, hard: list[BoolRef] = None, soft: list[BoolRef] = None) -> None:
+        """
+        Randomize the request fields of the sequence item.
+        """
+        for f in ["prdata", "pslverr", "pruser", "pbuser"]:
+            if hasattr(self, f):
+                getattr(self, f)._auto_random_ = False
+
+        self.randomize(hard=hard, soft=soft)
+
+        for f in ["prdata", "pslverr", "pruser", "pbuser"]:
+            if hasattr(self, f):
+                getattr(self, f)._auto_random_ = True
+
+    def randomize_completion(self, hard: list[BoolRef] = None, soft: list[BoolRef] = None) -> None:
+        """
+        Randomize the completion fields of the sequence item.
+        """
+
+        for f in ["paddr", "psel", "pwrite", "pwdata", "pstrb", "pprot", "pnse", "pauser", "pwuser", "goto_sleep"]:
+            if hasattr(self, f):
+                getattr(self, f)._auto_random_ = False
+
+        self.randomize(hard=hard, soft=soft)
+
+        for f in ["paddr", "psel", "pwrite", "pwdata", "pstrb", "pprot", "pnse", "pauser", "pwuser", "goto_sleep"]:
+            if hasattr(self, f):
+                getattr(self, f)._auto_random_ = True
+
+__all__ = ["SequenceItem"]

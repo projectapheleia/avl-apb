@@ -1,0 +1,40 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Distribution / packaging
+.Python
+build/
+dist/
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# PyBuilder
+.pybuilder/
+target/
+
+# Environments
+venv/
+.venv/
+
+# Verilator
+sim_build/
+results.xml
+*.vcd
+*.fsdb
+
+.failed
+.passed
+*.log
+*.vhex
+*.vbin
+*.vmem
+*.ihex
+*.srec
+*.ti-txt
