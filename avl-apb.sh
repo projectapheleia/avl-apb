@@ -2,7 +2,7 @@
 
 # Environment setup
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export AVL_ROOT="$SCRIPT_DIR"
+export AVL_APB_ROOT="$SCRIPT_DIR"
 
 # Graphviz setup
 if ! command -v dot --help &> /dev/null
@@ -12,7 +12,7 @@ fi
 
 # Python setup
 
-pushd $AVL_ROOT 1>/dev/null
+pushd $AVL_APB_ROOT 1>/dev/null
 
 python_packages=(\
 ".[dev]"
