@@ -2,75 +2,74 @@
 //
 // Description:
 // Apheleia Verification Library APB Interface
+// As defined in https://developer.arm.com/documentation/ihi0024/latest/
 
-interface apb_if #(parameter string CLASSIFICATION  = "APB",
-                   parameter int    VERSION         = 2,
-                   parameter int    PSEL_WIDTH      = 1,
-                   parameter int    ADDR_WIDTH      = 32,
-                   parameter int    DATA_WIDTH      = 32,
-                   parameter int    PROTECTION      = 0,
-                   parameter int    RME             = 0,
-                   parameter int    WAKEUP          = 0,
-                   parameter int    USER_REQ_WIDTH  = 0,
-                   parameter int    USER_DATA_WIDTH = 0,
-                   parameter int    USER_RESP_WIDTH = 0)();
+`define AVL_APB_IMPL_CHECK(cond, signal) \
+if (``cond`` == 1) begin : ``signal``_cond \
+    initial begin \
+        #0.1; \
+        @(``signal``) $fatal("%m: ``signal`` not supported in configuration");\
+    end \
+end : ``signal``_cond
 
-    logic                  pclk;
-    logic                  presetn;
+interface apb_if #(parameter string CLASSIFICATION      = "APB",
+                   parameter int    VERSION             = 2,
+                   parameter int    PSEL_WIDTH          = 1,
+                   parameter int    ADDR_WIDTH          = 32,
+                   parameter int    DATA_WIDTH          = 32,
+                   parameter bit    Protection_Support  = 0,
+                   parameter bit    RME_Support         = 0,
+                   parameter bit    Pstrb_Support       = 0,
+                   parameter bit    Wakeup_Signal       = 0,
+                   parameter int    USER_REQ_WIDTH      = 0,
+                   parameter int    USER_DATA_WIDTH     = 0,
+                   parameter int    USER_RESP_WIDTH     = 0)();
 
-    logic [ADDR_WIDTH-1:0] paddr;
-    logic [PSEL_WIDTH-1:0] psel;
-    logic                  penable;
+    localparam PSTRB_WIDTH = int'(DATA_WIDTH/8);
 
-    logic                  pwrite;
-    logic [DATA_WIDTH-1:0] pwdata;
-    logic [DATA_WIDTH-1:0] prdata;
+    logic                                                   pclk;
+    logic                                                   presetn;
+    logic [ADDR_WIDTH-1:0]                                  paddr;
+    logic [2:0]                                             pprot;
+    logic                                                   pnse;
+    logic [PSEL_WIDTH-1:0]                                  psel;
+    logic                                                   penable;
+    logic                                                   pwrite;
+    logic [DATA_WIDTH-1:0]                                  pwdata;
+    logic [PSTRB_WIDTH-1:0]                                 pstrb;
+    logic                                                   pready;
+    logic [DATA_WIDTH-1:0]                                  prdata;
+    logic                                                   pslverr;
+    logic                                                   pwakeup;
+    logic [USER_REQ_WIDTH  > 0 ? USER_REQ_WIDTH-1  : 0 : 0] pauser;
+    logic [USER_DATA_WIDTH > 0 ? USER_DATA_WIDTH-1 : 0 : 0] pwuser;
+    logic [USER_DATA_WIDTH > 0 ? USER_DATA_WIDTH-1 : 0 : 0] pruser;
+    logic [USER_RESP_WIDTH > 0 ? USER_RESP_WIDTH-1 : 0 : 0] pbuser;
 
     generate
-        if (VERSION >= 3) begin : apb3
-            logic pready;
-            logic pslverr;
-        end
 
-        if (VERSION >= 4) begin : apb4
-            logic [(DATA_WIDTH/8)-1:0] pstrb;
-            logic [2:0]                pprot;
+        `AVL_APB_IMPL_CHECK((VERSION < 3), pready)
 
-            if (PROTECTION == 0) begin
-                always @(pprot) if ($time != 0) $fatal("Protection not supported");
-            end
-        end
+        `AVL_APB_IMPL_CHECK((VERSION < 3), pslverr)
 
-        if (VERSION >= 5) begin : apb5
-            logic pnse;
-            logic pwakeup;
-            logic [USER_REQ_WIDTH  > 0 ? USER_REQ_WIDTH-1  : 0 : 0] pauser;
-            logic [USER_DATA_WIDTH > 0 ? USER_DATA_WIDTH-1 : 0 : 0] pwuser;
-            logic [USER_DATA_WIDTH > 0 ? USER_DATA_WIDTH-1 : 0 : 0] pruser;
-            logic [USER_RESP_WIDTH > 0 ? USER_RESP_WIDTH-1 : 0 : 0] pbuser;
+        `AVL_APB_IMPL_CHECK(((VERSION < 4) || (Protection_Support == 0)), pprot)
 
-            if ((PROTECTION == 0) || (RME == 0)) begin
-                always @(pnse) if ($time != 0) $fatal("RME not supported");
-            end
+        `AVL_APB_IMPL_CHECK(((VERSION < 4) || (Pstrb_Support == 0)), pstrb)
 
-            if (WAKEUP == 0) begin
-                always @(pwakeup) if ($time != 0) $fatal("Wakeup not supported");
-            end
+        `AVL_APB_IMPL_CHECK(((VERSION < 5) || (RME_Support == 0)), pnse)
 
-            if (USER_REQ_WIDTH == 0) begin : user_req
-                always @(pauser) if ($time != 0) $fatal("User request not supported");
-            end
+        `AVL_APB_IMPL_CHECK(((VERSION < 5) || (Wakeup_Signal == 0)), pwakeup)
 
-            if (USER_DATA_WIDTH == 0) begin : user_data
-                always @(pwuser) if ($time != 0) $fatal("User data not supported");
-                always @(pruser) if ($time != 0) $fatal("User data not supported");
-            end
+        `AVL_APB_IMPL_CHECK(((VERSION < 5) || (USER_REQ_WIDTH == 0)), pauser)
 
-            if (USER_RESP_WIDTH == 0) begin : user_resp
-                always @(pbuser) if ($time != 0) $fatal("User resp not supported");
-            end
-        end
+        `AVL_APB_IMPL_CHECK(((VERSION < 5) || (USER_DATA_WIDTH == 0)), pwuser)
+
+        `AVL_APB_IMPL_CHECK(((VERSION < 5) || (USER_DATA_WIDTH == 0)), pruser)
+
+        `AVL_APB_IMPL_CHECK(((VERSION < 5) || (USER_RESP_WIDTH == 0)), pbuser)
 
     endgenerate
 
 endinterface : apb_if
+
+`undef AVL_APB_IMPL_CHECK

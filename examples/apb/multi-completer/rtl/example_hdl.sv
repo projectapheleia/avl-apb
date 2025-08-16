@@ -3,7 +3,10 @@ module example_hdl();
 
     logic clk, rst_n;
 
-    apb_if#(.ADDR_WIDTH(12),.PSEL_WIDTH(3),.DATA_WIDTH(16),.VERSION(3))  apb_if();
+    apb_if#(.VERSION(3),
+            .PSEL_WIDTH(3),
+            .ADDR_WIDTH(12),
+            .DATA_WIDTH(16))  apb_if();
 
     assign apb_if.pclk = clk;
     assign apb_if.presetn = rst_n;

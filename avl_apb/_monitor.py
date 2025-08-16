@@ -51,7 +51,7 @@ class Monitor(avl.Monitor):
 
             while True:
                 await RisingEdge(self.i_f.pclk)
-                if self.i_f.version < 3 or self.i_f.pready == 1:
+                if bool(self.i_f.get("pready", 1)):
                     break
                 item.wait_cycles += 1
 

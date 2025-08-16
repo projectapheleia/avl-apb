@@ -22,7 +22,7 @@ VSIM_ARGS            += -lib work
 
 # Enable VCD trace from Verilator
 ifeq ($(SIM), verilator)
-EXTRA_ARGS           += --trace --trace-structs
+EXTRA_ARGS           += --trace --trace-structs --timing
 endif
 
 # Default seed

@@ -45,7 +45,7 @@ class Bandwidth(avl.Component):
             while True:
                 self.item = await self.item_port.blocking_get()
 
-                incr = self.i_f.data_width // 8
+                incr = self.i_f.PSTRB_WIDTH
                 if self.item.get("pwrite"):
                     pstrb = self.item.get("pstrb", None)
                     if pstrb is not None:

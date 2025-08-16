@@ -13,60 +13,78 @@ class Interface:
         Create an interface
         Work around simulator specific issues with accessing signals inside generates.
         """
-        # Parameters
-        self.classification = str(hdl.CLASSIFICATION.value.decode("utf-8"))
-        self.version = int(hdl.VERSION.value)
-        self.psel_width = int(hdl.PSEL_WIDTH.value)
-        self.address_width = int(hdl.ADDR_WIDTH.value)
-        self.data_width = int(hdl.DATA_WIDTH.value)
-        self.protection = bool(hdl.PROTECTION.value)
-        self.rme = bool(hdl.RME.value)
-        self.wakeup = bool(hdl.WAKEUP.value)
-        self.user_req_width = int(hdl.USER_REQ_WIDTH.value)
-        self.user_data_width = int(hdl.USER_DATA_WIDTH.value)
-        self.user_resp_width = int(hdl.USER_RESP_WIDTH.value)
+        # Parameters and Signals
+        for child in list(hdl):
+            # Parameters start with a capital letter
+            if child._name[0].isupper():
+                if isinstance(child.value, bytes):
+                    setattr(self, child._name, str(child.value.decode("utf-8")))
+                else:
+                    setattr(self, child._name, int(child.value))
+            else:
+                setattr(self, child._name, child)
 
-        # Base Signals
-        self.pclk = hdl._id("pclk", extended=False)
-        self.presetn = hdl._id("presetn", extended=False)
-        self.paddr  = hdl._id("paddr", extended=False)
-        self.psel = hdl._id("psel", extended=False)
-        self.penable = hdl._id("penable", extended=False)
-        self.pwrite = hdl._id("pwrite", extended=False)
-        self.pwdata = hdl._id("pwdata", extended=False)
-        self.prdata = hdl._id("prdata", extended=False)
+        if self.CLASSIFICATION != "APB":
+            raise TypeError(f"Expected APB classification, got {self.CLASSIFICATION}")
 
-        # APB3
-        if self.version >= 3:
-            self.pready = hdl._id("apb3.pready", extended=False)
-            self.pslverr = hdl._id("apb3.pslverr", extended=False)
+        if self.VERSION not in [2, 3, 4, 5]:
+            raise ValueError(f"Unsupported APB version: {self.VERSION}")
 
-        # APB4
-        if self.version >= 4 :
-            self.pstrb = hdl._id("apb4.pstrb", extended=False)
-            if self.protection:
-                self.pprot = hdl._id("apb4.pprot", extended=False)
+        if self.PSEL_WIDTH < 1:
+            raise ValueError(f"Invalid PSEL_WIDTH: {self.PSEL_WIDTH}")
 
-        # APB5
-        if self.version >= 5:
-            if self.protection and self.rme:
-                self.pnse = hdl._id("apb5.pnse", extended=False)
-            if self.wakeup:
-                self.pwakeup = hdl._id("apb5.pwakeup", extended=False)
-            if self.user_req_width > 0:
-                self.pauser = hdl._id("apb5.pauser", extended=False)
-            if self.user_data_width > 0:
-                self.pwuser = hdl._id("apb5.pwuser", extended=False)
-                self.pruser = hdl._id("apb5.pruser", extended=False)
-            if self.user_resp_width > 0:
-                self.pbuser = hdl._id("apb5.pbuser", extended=False)
+        # Remove un-configured signals
+        if self.VERSION < 3:
+            delattr(self, "pready")
+            delattr(self, "pslverr")
+
+        if self.VERSION < 4 or self.Protection_Support == 0:
+            delattr(self, "pprot")
+
+        if self.VERSION < 4 or self.Pstrb_Support == 0:
+            delattr(self, "pstrb")
+
+        if self.VERSION < 5 or self.RME_Support == 0:
+            delattr(self, "pnse")
+
+        if self.VERSION < 5 or self.Wakeup_Signal == 0:
+            delattr(self, "pwakeup")
+
+        if self.VERSION < 5 or self.USER_REQ_WIDTH == 0:
+            delattr(self, "pauser")
+
+        if self.VERSION < 5 or self.USER_DATA_WIDTH == 0:
+            delattr(self, "pwuser")
+            delattr(self, "pruser")
+
+        if self.VERSION < 5 or self.USER_RESP_WIDTH == 0:
+            delattr(self, "pbuser")
 
     def set(self, name : str, value : int) -> None:
+        """
+        Set the value of a signal (if signal exists)
+
+        :param name: The name of the signal
+        :type name: str
+        :param value: The value to set
+        :type value: int
+        :return: None
+        """
         signal = getattr(self, name, None)
         if signal is not None:
             signal.value = value
 
     def get(self, name : str, default : Any = None) -> int:
+        """
+        Get the value of a signal (if signal exists)
+
+        :param name: The name of the signal
+        :type name: str
+        :param default: The default value to return if signal does not exist
+        :type default: Any
+        :return: The value of the signal or the default value
+        :rtype: int
+        """
         signal = getattr(self, name, None)
         if signal is not None:
             return signal.value

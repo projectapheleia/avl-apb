@@ -83,11 +83,6 @@ class Agent(avl.Agent):
         self.i_f = Interface(hdl)
         avl.Factory.set_variable(f"{self.get_full_name()}.*.i_f", self.i_f)
 
-        if self.i_f.classification != "APB":
-            raise TypeError(f"Expected APB classification, got {self.i_f.classification}")
-        if self.i_f.version not in [2, 3, 4, 5]:
-            raise ValueError(f"Unsupported APB version: {self.i_f.version}")
-
     async def run_phase(self) -> None:
         """
         Run the agent's phase. This method is called to start the agent's operation.

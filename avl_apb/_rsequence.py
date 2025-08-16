@@ -41,7 +41,7 @@ class ReqSequence(avl.Sequence):
                 (psel, lo, hi) = random.choices(list(self.ranges.keys()), weights=list(self.ranges.values()), k=1)[0]
 
                 item.add_constraint("_c_psel_", lambda x: x == int(1 << psel), item.psel)
-                item.add_constraint("_c_paddr_", lambda x: And(x >= lo, x <= hi - (self.i_f.data_width/8)), item.paddr)
+                item.add_constraint("_c_paddr_", lambda x: And(x >= lo, x <= hi - self.i_f.PSTRB_WIDTH), item.paddr)
 
             item.randomize_request()
             await self.finish_item(item)

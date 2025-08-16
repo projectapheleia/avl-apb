@@ -19,51 +19,59 @@ class SequenceItem(avl.SequenceItem):
         """
         super().__init__(name, parent)
 
-        # Handle to interface - defines capabilites and parameters
+        # Handle to interface - defines capabilities and parameters
         i_f = avl.Factory.get_variable(f"{self.get_full_name()}.i_f", None)
 
-        self.paddr = avl.Logic(0, width=i_f.address_width, fmt=hex)
+        self.paddr = avl.Logic(0, width=len(i_f.paddr), fmt=hex)
         """Address"""
-        self.psel = avl.Logic(0, width=i_f.psel_width, fmt=hex)
+
+        self.psel = avl.Logic(0, width=len(i_f.psel), fmt=hex)
         """Select (1-hot)"""
-        self.pwrite = avl.Logic(0, width=1, fmt=str)
+
+        self.pwrite = avl.Logic(0, width=len(i_f.pwrite), fmt=str)
         """Write enable"""
-        self.pwdata = avl.Logic(0, width=i_f.data_width, fmt=hex)
+
+        self.pwdata = avl.Logic(0, width=len(i_f.pwdata), fmt=hex)
         """Write data"""
-        self.prdata = avl.Logic(0, width=i_f.data_width, fmt=hex)
+
+        self.prdata = avl.Logic(0, width=len(i_f.prdata), fmt=hex)
         """Read data"""
 
-        if i_f.version >= 3:
-            self.pslverr = avl.Logic(0, width=1, fmt=str)
+        if hasattr(i_f, "pslverr"):
+            self.pslverr = avl.Logic(0, width=len(i_f.pslverr), fmt=str)
             """Slave error (>= version 3)"""
 
-        if i_f.version >= 4:
-            self.pstrb = avl.Logic(0, width=int(i_f.data_width / 8), fmt=hex)
+        if hasattr(i_f, "pstrb"):
+            self.pstrb = avl.Logic(0, width=len(i_f.pstrb), fmt=hex)
             """Write strobe (byte enable) (>= version 4)"""
-            if i_f.protection:
-                self.pprot = avl.Logic(0, width=3, fmt=hex)
-                """Protection bits (optional >= version 4)"""
 
-        if i_f.version >= 5:
-            if i_f.protection and i_f.rme:
-                self.pnse = avl.Logic(0, width=1, fmt=str)
-                """Non-secure enable (optional >= version 5)"""
+        if hasattr(i_f, "pprot"):
+            self.pprot = avl.Logic(0, width=len(i_f.pprot), fmt=hex)
+            """Protection bits (optional >= version 4)"""
 
-            if i_f.wakeup:
-                self.goto_sleep = avl.Bool(False)
-                """Wakeup indication (optional >= version 5)"""
+        if hasattr(i_f, "pnse"):
+            self.pnse = avl.Logic(0, width=len(i_f.pnse), fmt=str)
+            """Non-secure enable (optional >= version 5)"""
 
-            if i_f.user_req_width > 0:
-                self.pauser = avl.Logic(0, width=max(1, i_f.user_req_width), fmt=hex)
-                """User Request Sideband (optional >= version 5)"""
-            if i_f.user_data_width > 0:
-                self.pwuser = avl.Logic(0, width=max(1, i_f.user_data_width), fmt=hex)
-                """User Write Sideband (optional >= version 5)"""
-                self.pruser = avl.Logic(0, width=max(1, i_f.user_data_width), fmt=hex)
-                """User Read Sideband (optional >= version 5)"""
-            if i_f.user_resp_width > 0:
-                self.pbuser = avl.Logic(0, width=max(1, i_f.user_resp_width), fmt=hex)
-                """User Response Sideband (optional >= version 5)"""
+        if hasattr(i_f, "pwakeup"):
+            self.goto_sleep = avl.Logic(0, width=len(i_f.pwakeup), fmt=str)
+            """Wakeup indication (optional >= version 5)"""
+
+        if hasattr(i_f, "pauser"):
+            self.pauser = avl.Logic(0, width=len(i_f.pauser), fmt=hex)
+            """User Request Sideband (optional >= version 5)"""
+
+        if hasattr(i_f, "pwuser"):
+            self.pwuser = avl.Logic(0, width=len(i_f.pwuser), fmt=hex)
+            """User Write Sideband (optional >= version 5)"""
+
+        if hasattr(i_f, "pruser"):
+            self.pruser = avl.Logic(0, width=len(i_f.pruser), fmt=hex)
+            """User Read Sideband (optional >= version 5)"""
+
+        if hasattr(i_f, "pbuser"):
+            self.pbuser = avl.Logic(0, width=len(i_f.pbuser), fmt=hex)
+            """User Response Sideband (optional >= version 5)"""
 
         # Constraints
         self.add_constraint("c_psel_valid", lambda x : x != 0, self.psel)

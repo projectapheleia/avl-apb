@@ -155,7 +155,7 @@ class CplMemoryDriver(CplDriver):
         :type parent: Component
         """
         super().__init__(name, parent)
-        self.memory = avl.Memory(width=self.i_f.data_width)
+        self.memory = avl.Memory(width=self.i_f.DATA_WIDTH)
         self.memory.miss = lambda address : None
 
         # Add ranges to the memory if specified in the configuration

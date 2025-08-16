@@ -8,7 +8,7 @@ AVL-APB Completer
 
 The completer side of the AVL-APB agent does not follow the standard AVL / UVM structure of sequence, sequencer and driver.
 
-As the completer is inheritably responsive the complication of interacting between a monitor, sequence and driver is overly complicated \
+As the completer is responsive the overhead of interacting between a monitor, sequence and driver is overly complicated \
 and not required.
 
 Instead the completer is implemented as a single driver that implements the legal protocol for the bus via 3 user defined tasks:
@@ -29,7 +29,7 @@ This index is assiged atomatically by the :any:`avl_apb._cdriver.CplDriver` clas
 
 3 drivers are provided:
 
-- :any:`CplDriver` - The default driver that completes the request by driving the response signals.
+- :any:`CplDriver` - The default driver that completes the request by driving the response signals (protocol only - data values are left 0).
 - :any:`CplRandomDriver` - Fully randomize the completion based on the :any:`SequenceItem` attributes.
 - :any:`CplMemoryDriver` - Completes the request behaving as a memory device.
 

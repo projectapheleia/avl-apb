@@ -13,12 +13,15 @@ modifying the avl_apb.sv file.
 
 Connection the interface to the APB bus should be done with standard assign statements.
 
-Version specific signals are included within generate blocks based on the VERSION parameter of the interface. \
-All signals for that generation are included. However, optional signals required by default. \
-To enable optional signals, the user must set the appropriate parameters in the interface.
+All signals are included, however, optional signals are disabled by default. \
+To enable optional signals, the user must set the appropriate parameters in the interface. \
+Where defined the same configuration naming conventions used in the AMBA specification have been followed.
 
 Assertion checks for optional signals that are not included ensure they remain unchanged during simulation and therefore can \
 be ignored the the user.
+
+These assertion checks are deliberately implemented as initial blocks with $fatals in order to be supported on \
+the widest range of simulators.
 
 
 .. literalinclude:: ../../../avl_apb/rtl/avl_apb.sv
