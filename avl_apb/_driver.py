@@ -3,13 +3,13 @@
 # Description:
 # Apheleia Verification Library Base Driver
 
-import avl
-from ._item import SequenceItem
 
+import avl
 import cocotb
 from cocotb.triggers import FallingEdge, First
 
-import random
+from ._item import SequenceItem
+
 
 class Driver(avl.Driver):
 

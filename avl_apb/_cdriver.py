@@ -3,13 +3,14 @@
 # Description:
 # Apheleia Verification Library Driver
 
-import avl
-from ._item import SequenceItem
-from ._driver import Driver
-
 import random
 
+import avl
 from cocotb.triggers import RisingEdge
+
+from ._driver import Driver
+from ._item import SequenceItem
+
 
 class CplDriver(Driver):
 

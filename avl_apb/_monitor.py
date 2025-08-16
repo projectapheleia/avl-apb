@@ -4,11 +4,12 @@
 # Apheleia Verification Library Monitor
 
 import avl
+import cocotb
+from cocotb.triggers import FallingEdge, First, ReadOnly, RisingEdge
+from cocotb.utils import get_sim_time
+
 from ._item import SequenceItem
 
-import cocotb
-from cocotb.triggers import RisingEdge, FallingEdge, ReadOnly, First
-from cocotb.utils import get_sim_time
 
 class Monitor(avl.Monitor):
     def __init__(self, name: str, parent: avl.Component) -> None:

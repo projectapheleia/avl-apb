@@ -4,14 +4,12 @@
 # Apheleia Verification Library Bandwidth Monitor
 
 import avl
-
 import cocotb
-from cocotb.utils import get_sim_time
-from cocotb.triggers import Timer
-
-import numpy as np
-
 import matplotlib.pyplot as plt
+import numpy as np
+from cocotb.triggers import Timer
+from cocotb.utils import get_sim_time
+
 
 class Bandwidth(avl.Component):
 

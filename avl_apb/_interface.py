@@ -3,9 +3,10 @@
 # Description:
 # Apheleia Verification Library Interface
 
+from typing import Any
+
 from cocotb.handle import HierarchyObject
 
-from typing import Any
 
 class Interface:
     def __init__(self, hdl : HierarchyObject) -> None:

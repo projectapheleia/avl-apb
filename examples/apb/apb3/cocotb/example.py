@@ -7,7 +7,6 @@
 import avl
 import avl_apb
 import cocotb
-from cocotb.triggers import Timer
 
 
 class example_env(avl.Env):

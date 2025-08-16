@@ -4,7 +4,7 @@
 # Apheleia Verification Library Coverage
 
 import avl
-from ._item import SequenceItem
+
 
 class Coverage(avl.Component):
 

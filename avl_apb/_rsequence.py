@@ -3,10 +3,13 @@
 # Description:
 # Apheleia Verification Library Requester Sequence
 
-import avl
-from ._item import SequenceItem
-from z3 import And, Or
 import random
+
+import avl
+from z3 import And
+
+from ._item import SequenceItem
+
 
 class ReqSequence(avl.Sequence):
 
@@ -40,8 +43,8 @@ class ReqSequence(avl.Sequence):
             if self.ranges is not None:
                 (psel, lo, hi) = random.choices(list(self.ranges.keys()), weights=list(self.ranges.values()), k=1)[0]
 
-                item.add_constraint("_c_psel_", lambda x: x == int(1 << psel), item.psel)
-                item.add_constraint("_c_paddr_", lambda x: And(x >= lo, x <= hi - self.i_f.PSTRB_WIDTH), item.paddr)
+                item.add_constraint("_c_psel_", lambda x,y=psel: x == int(1 << y), item.psel)
+                item.add_constraint("_c_paddr_", lambda x,y=lo,z=(hi-self.i_f.PSTRB_WIDTH): And(x >= y, x <= z), item.paddr)
 
             item.randomize_request()
             await self.finish_item(item)

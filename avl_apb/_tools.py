@@ -5,6 +5,7 @@
 
 from importlib.resources import files
 
+
 def get_verilog():
     """
     Get the path to the Verilog source files for the APB agent.

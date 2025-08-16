@@ -5,6 +5,7 @@
 
 import avl
 
+
 class AgentCfg(avl.Object):
 
     def __init__(self, name: str, parent: avl.Component) -> None:

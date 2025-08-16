@@ -3,11 +3,11 @@
 # Description:
 # Apheleia Verification Library Sequence Item
 
-import avl
-
-from z3 import Implies, BoolRef
-
 from typing import Any
+
+import avl
+from z3 import BoolRef, Implies
+
 
 class SequenceItem(avl.SequenceItem):
     def __init__(self, name: str, parent: avl.Component) -> None:

@@ -4,17 +4,18 @@
 # Apheleia Verification Library Agent
 
 import avl
+from cocotb.handle import HierarchyObject
+from cocotb.triggers import NextTimeStep, RisingEdge
+
 from ._agent_cfg import AgentCfg
+from ._bandwidth import Bandwidth
 from ._cdriver import CplDriver
+from ._coverage import Coverage
+from ._interface import Interface
+from ._monitor import Monitor
 from ._rdriver import ReqDriver
 from ._rsequence import ReqSequence
-from ._monitor import Monitor
-from ._interface import Interface
-from ._coverage import Coverage
-from ._bandwidth import Bandwidth
 
-from cocotb.handle import HierarchyObject
-from cocotb.triggers import RisingEdge, NextTimeStep
 
 class Agent(avl.Agent):
     def __init__(self, name: str, parent: avl.Component) -> None:
