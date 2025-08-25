@@ -81,13 +81,16 @@ class SequenceItem(avl.SequenceItem):
             self.add_constraint("c_pstrb", lambda x, y : Implies(x == 0, y == 0), self.pwrite, self.pstrb)
 
         # Monitor only attributes used for debug and coverage
-        self.wait_cycles = 0
-        """Wait cycles - cycles from enable to ready (monitor only)"""
-        self.set_field_attributes("wait_cycles", compare=False)
+        if hasattr(i_f, "pready"):
+            self.wait_cycles = 0
+            """Wait cycles - cycles from enable to ready (monitor only)"""
+            self.set_field_attributes("wait_cycles", compare=False)
 
-        self.time_since_wakeup = 0
-        """Time since last wakeup - used for debug and coverage (monitor only)"""
-        self.set_field_attributes("time_since_wakeup", compare=False)
+
+        if hasattr(i_f, "pwakeup"):
+            self.time_since_wakeup = 0
+            """Time since last wakeup - used for debug and coverage (monitor only)"""
+            self.set_field_attributes("time_since_wakeup", compare=False)
 
         # By default transpose to make more readable
         self.set_table_fmt(transpose=True)

@@ -24,4 +24,4 @@ In addition to constructing the :any:`SequenceItem` from the observed bus activi
 Wait cycles are defined as the number of clock cycles between the request (penable) and the response (pready) signals and can be used \
 for coverage or latency analysis.
 
-In APB2 where the pready signal is not present wait cycles will always be 0.
+In APB2 where the pready signal is not present wait cycles will be excluded.
