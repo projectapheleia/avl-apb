@@ -53,15 +53,15 @@ AVL is built on the [CocoTB](https://docs.cocotb.org/en/stable/) framework, but 
 ### Using `pip`
 ```sh
 # Standard build
-pip install avl-core
+pip install avl-apb
 
 # Development build
-pip install avl-core[dev]
+pip install avl-apb[dev]
 ```
 
 ### Install from Source
 ```sh
-git clone https://github.com/projectapheleia/avl.git
+git clone https://github.com/projectapheleia/avl-apb.git
 cd avl
 
 # Standard build

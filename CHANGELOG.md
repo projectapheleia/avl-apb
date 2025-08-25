@@ -1,6 +1,8 @@
 # Changelog
+[v0.1.1] - 2025-08-25
 
 ## Fixed
+- [#3](https://github.com/projectapheleia/avl-apb/issues/3) README - fix install instructions
 - [#2](https://github.com/projectapheleia/avl-apb/issues/2) Monitor - should avoid using ReadOnly()
 - [#1](https://github.com/projectapheleia/avl-apb/issues/1) Coverage - sampling issue on buses. Should compare !=0
 
