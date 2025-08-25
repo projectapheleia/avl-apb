@@ -36,9 +36,11 @@ class Monitor(avl.Monitor):
         try:
             item = SequenceItem(f"from_{self.name}", self)
             item.wait_cycles = 0
-            item.time_since_wakeup = get_sim_time("ns") - self.wakeup
 
-            await RisingEdge(self.i_f.pclk)
+            while bool(self.i_f.get("penable")):
+                await RisingEdge(self.i_f.pclk)
+
+            item.time_since_wakeup = get_sim_time("ns") - self.wakeup
 
             item.set("psel",   self.i_f.get("psel"))
             item.set("paddr",  self.i_f.get("paddr"))
@@ -94,9 +96,8 @@ class Monitor(avl.Monitor):
             cocotb.start_soon(wait_on_wakeup())
 
         while True:
-            await RisingEdge(self.i_f.pclk)
-            await ReadOnly()
             if self.i_f.presetn == 0 or self.i_f.psel == 0 or self.i_f.get("pwakeup", 1) == 0:
+                await RisingEdge(self.i_f.pclk)
                 continue
 
             monitor_task = cocotb.start_soon(self.monitor())
