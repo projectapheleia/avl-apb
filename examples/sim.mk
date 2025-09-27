@@ -14,8 +14,8 @@ COMPILE_ARGS         +=
 TOPLEVEL             := example_hdl
 PYTHONPATH           := $(PWD)/cocotb
 
-# MODULE is the basename of the Python test file(s)
-MODULE               ?= example
+# COCOTB_TEST_MODULES is the basename of the Python test file(s)
+COCOTB_TEST_MODULES  ?= example
 
 # Questa / ModelSim workaround
 VSIM_ARGS            += -lib work
@@ -26,8 +26,8 @@ EXTRA_ARGS           += --trace --trace-structs --timing
 endif
 
 # Default seed
-RANDOM_SEED	   		 ?= 1
-export RANDOM_SEED
+COCOTB_RANDOM_SEED	   		 ?= 1
+export COCOTB_RANDOM_SEED
 
 # include cocotb's make rules to take care of the simulator setup
 include $(shell cocotb-config --makefiles)/Makefile.sim

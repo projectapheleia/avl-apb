@@ -4,6 +4,8 @@
 # Apheleia Verification Library Base Driver
 
 
+import asyncio
+
 import avl
 import cocotb
 from cocotb.triggers import FallingEdge, First
@@ -52,7 +54,9 @@ class Driver(avl.Driver):
         try:
             await FallingEdge(self.i_f.presetn)
             await self.reset()
-        except BaseException:
+        except asyncio.CancelledError:
+            raise
+        except Exception:
             pass
 
     async def quiesce(self) -> None:
@@ -123,6 +127,6 @@ class Driver(avl.Driver):
 
             for t in [drive_task, reset_task]:
                 if not t.done():
-                    t.kill()
+                    t.cancel()
 
 __all__ = ["Driver"]

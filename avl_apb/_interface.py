@@ -88,7 +88,7 @@ class Interface:
         """
         signal = getattr(self, name, None)
         if signal is not None:
-            return signal.value
+            return int(signal.value)
         return default
 
 __all__ = ["Interface"]

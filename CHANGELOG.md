@@ -1,4 +1,9 @@
 # Changelog
+[v0.2.0] - 2025-09-27
+
+### Added
+- [#4](https://github.com/projectapheleia/avl-apb/issues/4) Update to cocotb 2.0
+
 [v0.1.1] - 2025-08-25
 
 ## Fixed

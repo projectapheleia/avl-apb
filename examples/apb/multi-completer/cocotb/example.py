@@ -21,8 +21,8 @@ class example_env(avl.Env):
     async def run_phase(self):
         self.raise_objection()
 
-        await cocotb.start(self.timeout(1, units="ms"))
-        await cocotb.start(self.clock(self.clk, 100))
+        cocotb.start_soon(self.timeout(1, units="ms"))
+        cocotb.start_soon(self.clock(self.clk, 100))
         await self.async_reset(self.rst_n, duration=100, units="ns", active_high=False)
 
         self.drop_objection()

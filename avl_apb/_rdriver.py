@@ -3,6 +3,7 @@
 # Description:
 # Apheleia Verification Library Driver
 
+import asyncio
 import random
 
 import avl
@@ -139,7 +140,9 @@ class ReqDriver(Driver):
 
             item.set_event("done")
 
-        except BaseException:
+        except asyncio.CancelledError:
+            raise
+        except Exception:
             self.warning(f"Requester drive task for item was cancelled by reset:\n{item}")
 
     async def get_next_item(self, item : SequenceItem = None) -> SequenceItem:

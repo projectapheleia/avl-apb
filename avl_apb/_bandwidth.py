@@ -53,11 +53,11 @@ class Bandwidth(avl.Component):
         cocotb.start_soon(counter())
 
         while True:
-            t = get_sim_time(units="ns")
+            t = get_sim_time(unit="ns")
             self.bandwidth[t] = 0
 
             self.raise_objection()
-            await Timer(self.window_ns, units="ns")
+            await Timer(self.window_ns, unit="ns")
             self.drop_objection()
 
     async def report_phase(self) -> None:

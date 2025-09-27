@@ -3,6 +3,7 @@
 # Description:
 # Apheleia Verification Library Driver
 
+import asyncio
 import random
 
 import avl
@@ -71,8 +72,10 @@ class CplDriver(Driver):
             # Clear the bus
             await self.quiesce()
 
-        except BaseException:
-            self.fatal(f"Completer drive task for item was cancelled by reset:\n{item}")
+        except asyncio.CancelledError:
+            raise
+        except Exception:
+            self.debug(f"Completer drive task for item was cancelled by reset:\n{item}")
 
     async def get_next_item(self, item : SequenceItem = None) -> SequenceItem:
         """

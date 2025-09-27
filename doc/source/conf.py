@@ -8,7 +8,7 @@ from unittest import mock
 
 MOCK_MODULES = [
     "cocotb", "cocotb.utils", "cocotb.simulator", "cocotb.triggers", "cocotb.clock",
-    "cocotb.handle", "cocotb.binary", "cocotb.decorators", "cocotb.result"
+    "cocotb.handle", "cocotb.binary", "cocotb.decorators", "cocotb.result", "cocotb.regression"
 ]
 for mod_name in MOCK_MODULES:
     sys.modules[mod_name] = mock.MagicMock()

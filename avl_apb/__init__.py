@@ -9,7 +9,7 @@ from ._rdriver import ReqDriver
 from ._rsequence import ReqSequence
 
 # Add version
-__version__: str = "0.1.0"
+__version__: str = "0.2.0"
 
 __all__ = [
     "Agent",

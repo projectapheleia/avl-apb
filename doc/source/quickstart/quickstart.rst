@@ -18,6 +18,14 @@ In order to run the examples you will need to have installed:
 
 It's also recommended that you have a basic understanding of the `cocotb <https://docs.cocotb.org/en/stable/>`_ framework.
 
+CocoTB 2.0
+----------
+AVL-APB now supports `CocoTB2.0 <https://docs.cocotb.org/en/development/upgrade-2.0.html>`_. This was introduced in v0.2.0.
+
+All older versions support v1.9.1 and will fail if run with CocoTB 2.0.
+
+To upgrade follow the instructions given on the link above.
+
 Installing From pip
 ---------------------
 
@@ -34,7 +42,7 @@ If you want to install a specific version, you can specify the version number:
 
 .. code-block:: bash
 
-    pip install avl-apb==0.1.1
+    pip install avl-apb==0.2.0
 
 Installing From Source
 ----------------------

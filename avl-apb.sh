@@ -5,7 +5,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 export AVL_APB_ROOT="$SCRIPT_DIR"
 
 # Graphviz setup
-if ! command -v dot --help &> /dev/null
+if ! command -v dot &> /dev/null
 then
     echo "WARNING : Graphviz could not be found. Please install Graphviz and ensure it is in your PATH (see https://graphviz.org/download/) if you want to generate docs and run all examples."
 fi
