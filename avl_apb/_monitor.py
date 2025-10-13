@@ -97,6 +97,9 @@ class Monitor(avl.Monitor):
             except Exception:
                 pass
 
+        # Wait on first reset
+        await wait_on_reset()
+
         # Start Wakeup Monitor
         if hasattr(self.i_f, "pwakeup"):
             cocotb.start_soon(wait_on_wakeup())

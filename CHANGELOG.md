@@ -1,4 +1,11 @@
 # Changelog
+
+[v0.3.0] - 2-25-10-13
+
+### Fixed
+ -[#5](https://github.com/projectapheleia/avl-apb/issues/5) Modelsim does not support detecting parameters through VPI
+
+
 [v0.2.0] - 2025-09-27
 
 ### Added

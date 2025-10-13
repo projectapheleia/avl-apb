@@ -1,6 +1,6 @@
 [project]
 name = "avl-apb"
-version = "0.2.0"
+version = "0.3.0"
 description = "Apheleia Verification Library - AMBA Advanced Peripheral Bus verification component."
 authors = [{name = "avl", email = "avl@projectapheleia.net"}]
 maintainers = [{name = "avl", email = "avl@projectapheleia.net"}]

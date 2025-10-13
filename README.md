@@ -95,7 +95,7 @@ In order to build the documentation you must have installed the development buil
 
 ### Build from Source
 ```sh
-cd docs
+cd doc
 make html
 <browser> build/html/index.html
 ```
