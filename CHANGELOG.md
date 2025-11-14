@@ -1,6 +1,12 @@
 # Changelog
 
-[v0.3.0] - 2-25-10-13
+[v0.3.1] - 2025-11-14
+
+### Fixed
+ -[#6](https://github.com/projectapheleia/avl-apb/issues/6) [monitor]: First APB transaction cycle not detected correctly
+
+
+[v0.3.0] - 2025-10-13
 
 ### Fixed
  -[#5](https://github.com/projectapheleia/avl-apb/issues/5) Modelsim does not support detecting parameters through VPI

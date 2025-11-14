@@ -39,7 +39,7 @@ class Monitor(avl.Monitor):
             item = SequenceItem(f"from_{self.name}", self)
             item.wait_cycles = 0
 
-            while bool(self.i_f.get("penable")):
+            while bool(self.i_f.get("penable")) or int(self.i_f.get("psel")) == 0:
                 await RisingEdge(self.i_f.pclk)
 
             item.time_since_wakeup = get_sim_time("ns") - self.wakeup
