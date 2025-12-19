@@ -182,9 +182,9 @@ class CplMemoryDriver(CplDriver):
 
         if self.memory._check_address_(item.get("paddr")):
             if item.get("pwrite", False):
-                self.memory.write(item.get("paddr"), item.get("pwdata"), strobe=item.get("pstrb", None))
+                self.memory.write(item.get("paddr"), item.get("pwdata"), strobe=item.get("pstrb", None), rotated=True)
             else:
-                item.set("prdata", self.memory.read(item.get("paddr")))
+                item.set("prdata", self.memory.read(item.get("paddr"), rotated=True))
         else:
             if hasattr(item, "pslverr"):
                 item.add_constraint("_c_pslverr_", lambda x: x == 1, item.pslverr)
