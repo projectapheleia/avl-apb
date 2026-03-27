@@ -1,5 +1,7 @@
 # Changelog
 
+## [v0.5.0] - 2026-03-27
+
 ### Fixed
  - [#9](https://github.com/projectapheleia/avl-apb/issues/9) Examples fail in VCS - Interface signal enumeration not working
 
