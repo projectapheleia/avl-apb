@@ -1,21 +1,24 @@
 # Changelog
 
+### Fixed
+ - [#9](https://github.com/projectapheleia/avl-apb/issues/9) Examples fail in VCS - Interface signal enumeration not working
+
 ## [v0.4.0] - 2025-12-19
 
 ### Fixed
- -[#7](https://github.com/projectapheleia/avl-apb/issues/7) Memory: Use avl0.4.0 rotated memory mode for unaligned access support
- -[#8](https://github.com/projectapheleia/avl-apb/issues/8) RSequence: Add directed read / write functions for simple directed testcases
+ - [#7](https://github.com/projectapheleia/avl-apb/issues/7) Memory: Use avl0.4.0 rotated memory mode for unaligned access support
+ - [#8](https://github.com/projectapheleia/avl-apb/issues/8) RSequence: Add directed read / write functions for simple directed testcases
 
 ## [v0.3.1] - 2025-11-14
 
 ### Fixed
- -[#6](https://github.com/projectapheleia/avl-apb/issues/6) [monitor]: First APB transaction cycle not detected correctly
+ - [#6](https://github.com/projectapheleia/avl-apb/issues/6) [monitor]: First APB transaction cycle not detected correctly
 
 
 ## [v0.3.0] - 2025-10-13
 
 ### Fixed
- -[#5](https://github.com/projectapheleia/avl-apb/issues/5) Modelsim does not support detecting parameters through VPI
+ - [#5](https://github.com/projectapheleia/avl-apb/issues/5) Modelsim does not support detecting parameters through VPI
 
 
 ## [v0.2.0] - 2025-09-27
