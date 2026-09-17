@@ -92,7 +92,6 @@ class Monitor(avl.Monitor):
             await ReadOnly()
             try:
                 await FallingEdge(self.i_f.presetn)
-                await self.reset()
             except asyncio.CancelledError:
                 raise
             except Exception:
