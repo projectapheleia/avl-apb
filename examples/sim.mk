@@ -12,10 +12,11 @@ COMPILE_ARGS         +=
 
 # TOPLEVEL is the name of the toplevel module in your Verilog or VHDL file
 TOPLEVEL             := example_hdl
-PYTHONPATH           := $(PWD)/cocotb
+export PYTHONPATH           := $(PWD)/cocotb
 
 # COCOTB_TEST_MODULES is the basename of the Python test file(s)
 COCOTB_TEST_MODULES  ?= example
+
 
 # Questa / ModelSim workaround
 VSIM_ARGS            += -lib work

@@ -7,7 +7,7 @@ import asyncio
 
 import avl
 import cocotb
-from cocotb.triggers import FallingEdge, First, RisingEdge
+from cocotb.triggers import FallingEdge, First, RisingEdge, ReadOnly
 from cocotb.utils import get_sim_time
 
 from ._item import SequenceItem
@@ -89,9 +89,9 @@ class Monitor(avl.Monitor):
                 self.wakeup = get_sim_time("ns")
 
         async def wait_on_reset() -> None:
+            await ReadOnly()
             try:
                 await FallingEdge(self.i_f.presetn)
-                await self.reset()
             except asyncio.CancelledError:
                 raise
             except Exception:
