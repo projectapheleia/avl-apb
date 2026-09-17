@@ -8,7 +8,7 @@
 if (``cond`` == 1) begin : ``signal``_cond \
     initial begin \
         #0.1; \
-        @(``signal``) $fatal("%m: ``signal`` not supported in configuration");\
+        @(``signal``) $fatal(1, "%m: ``signal`` not supported in configuration");\
     end \
 end : ``signal``_cond
 
