@@ -91,7 +91,10 @@ class Monitor(avl.Monitor):
         async def wait_on_reset() -> None:
             await ReadOnly()
             try:
-                await FallingEdge(self.i_f.presetn)
+                # in case reset is already asserted at time 0, just waiting for falling edge will never fire.
+                # we check explicitly for reset_n == "1", because it can also be "X" or "Z", not just 0.
+                if str(self.i_f.presetn.value) == "1":
+                    await FallingEdge(self.i_f.presetn)
             except asyncio.CancelledError:
                 raise
             except Exception:
@@ -105,7 +108,7 @@ class Monitor(avl.Monitor):
             cocotb.start_soon(wait_on_wakeup())
 
         while True:
-            if self.i_f.presetn == 0 or self.i_f.psel == 0 or self.i_f.get("pwakeup", 1) == 0:
+            if self.i_f.get("presetn") == 0 or self.i_f.get("psel") == 0 or self.i_f.get("pwakeup", 1) == 0:
                 await RisingEdge(self.i_f.pclk)
                 continue
 

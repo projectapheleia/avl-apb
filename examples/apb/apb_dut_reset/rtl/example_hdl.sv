@@ -29,6 +29,12 @@ module example_hdl ();
     rst_n = 1'b0;     // X -> 0 in time step 0: the monitor's FallingEdge(presetn) fires here
     #100;
     rst_n = 1'b1;
+
+    // Second reset in the middle of traffic: a real 1 -> 0 edge the monitor must catch
+    #500;
+    rst_n = 1'b0;
+    #100;
+    rst_n = 1'b1;
   end
 
 endmodule : example_hdl

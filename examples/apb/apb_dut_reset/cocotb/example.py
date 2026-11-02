@@ -1,7 +1,7 @@
 import avl
 import avl_apb
 import cocotb
-from cocotb.triggers import RisingEdge
+from cocotb.triggers import RisingEdge, ClockCycles
 
 
 class example_env(avl.Env):
@@ -18,7 +18,11 @@ class example_env(avl.Env):
         # Only bound the run. A hang at 0 ns never reaches this timer because the simulator
         # never regains control.
         cocotb.start_soon(self.timeout(100, units="us"))
+        self.info("test started, waiting for reset to be deasserted")
+        self.dut = avl.Factory.get_variable(f"{self.get_full_name()}.hdl", None)
         await RisingEdge(self.rst_n)
+        await ClockCycles(self.dut.pclk, 100)
+        self.info("test ended")
 
         self.drop_objection()
 
