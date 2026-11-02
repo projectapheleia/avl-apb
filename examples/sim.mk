@@ -17,7 +17,6 @@ PYTHONPATH           := $(PWD)/cocotb
 # COCOTB_TEST_MODULES is the basename of the Python test file(s)
 COCOTB_TEST_MODULES  ?= example
 
-
 # Questa / ModelSim workaround
 VSIM_ARGS            += -lib work
 
