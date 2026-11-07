@@ -1,5 +1,10 @@
 # Changelog
 
+## [v0.5.1] - 2026-11-03
+
+### Fixed
+ - [#10](https://github.com/projectapheleia/avl-apb/issues/10) APB MONITOR: waiting for reset doesn't work well when reset is done through the dut
+
 ## [v0.5.0] - 2026-03-27
 
 ### Fixed
